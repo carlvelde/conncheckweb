@@ -34,7 +34,7 @@ public class StartPage {
     }
 
     @PostMapping("/docheck")
-    public String handleFileUpload(@RequestParam("file") MultipartFile file, Model model) {
+    public String handleFileUpload(@RequestParam("file") MultipartFile file, @RequestParam(defaultValue = "") String ignoreLocal, Model model) {
 
 
         model.addAttribute("message", "Processing file " + file.getOriginalFilename() + " please wait...");
@@ -59,11 +59,13 @@ public class StartPage {
 
         // Get public IP of this server
         try {
-            model.addAttribute(DestinationUtils.getPublicIp(false));
+            model.addAttribute("localIp", destinationUtils.getPublicIp(false));
         } catch (IOException e) {
             model.addAttribute("Unable to get public IP of this server.");
             log.error("Unable to get public IP of this server.", e);
         }
+
+        model.addAttribute("ignoreLocal", "ignoreLocal".equals(ignoreLocal));
 
         return "docheck2";
     }

@@ -1,17 +1,21 @@
 package com.caabr.connchecker;
 
-/**
- * Created by caabr on 2016-11-17.
- */
+import org.junit.Test;
+
+
+
 public class TestSimpleSocketTest {
 
-    public static void main(String[] args) {
+    @Test
+    public void run() {
 
-        System.out.println(SimpleSocketTest.hostAvailabilityCheck("www.google.com", 80));
-        System.out.println(SimpleSocketTest.hostAvailabilityCheck("Exciter.local", 80));
-        System.out.println(SimpleSocketTest.hostAvailabilityCheck("172.168.0.1", 80));
-        System.out.println(SimpleSocketTest.hostAvailabilityCheck("wwww.asjkjklasd.se", 80));
-        System.out.println(SimpleSocketTest.hostAvailabilityCheck("www.google.com", 4444));
+        SimpleSocketTest simpleSocketTest = new SimpleSocketTest();
+        System.out.println(simpleSocketTest.hostAvailabilityCheck("www.google.com", 80, true));
+        System.out.println(simpleSocketTest.hostAvailabilityCheck("Exciter.local", 80, true));
+        System.out.println(simpleSocketTest.hostAvailabilityCheck("172.168.0.1", 80, true));
+        System.out.println(simpleSocketTest.hostAvailabilityCheck("172.168.0.1", 80, false));
+        System.out.println(simpleSocketTest.hostAvailabilityCheck("wwww.asjkjklasd.se", 80, true));
+        System.out.println(simpleSocketTest.hostAvailabilityCheck("www.google.com", 4444, true));
 
     }
 }

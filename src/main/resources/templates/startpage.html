@@ -75,6 +75,8 @@
             <h2>Steg 2</h2>
             <p>Ladda upp filen här och börja testa</p>
             <form method="POST" enctype="multipart/form-data" action="/docheck">
+                <p><input name="ignoreLocal" type="checkbox" value="ignoreLocal"/>&nbsp;Ignore hosts with private IPs
+                </p>
                 <p><input type="file" name="file" class="btn btn-default"/></p>
                 <p><input type="submit" value="Upload >>" class="btn btn-default"/></p>
             </form>

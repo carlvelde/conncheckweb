@@ -8,7 +8,7 @@ import java.net.*;
 /**
  * Created by caabr on 2016-11-17.
  */
-public class DestinationUtils {
+public final class DestinationUtils {
 
 
     /**
@@ -18,7 +18,7 @@ public class DestinationUtils {
      * @return The public ip address.
      * @throws IOException If there is an IO error.
      */
-    public static String getPublicIp(boolean useHttps) throws IOException {
+    public String getPublicIp(boolean useHttps) throws IOException {
         URL ipify = useHttps ? new URL("https://api.ipify.org") : new URL("http://api.ipify.org");
         String ip = null;
         URLConnection conn;

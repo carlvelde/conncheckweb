@@ -80,6 +80,8 @@
 <div class="container">
     <!-- Example row of columns -->
     <div class="row">
+        <p>Local IP of this server is <span th:text="${localIp}"></span></p>
+        <p>Ignore local IPs: <span id="ignoreLocal" th:text="${ignoreLocal}"/></p>
         <p th:text="${message}"/>
 
     </div>

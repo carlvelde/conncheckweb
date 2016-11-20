@@ -17,6 +17,10 @@ function pollQueue() {
     }
 }
 
+function ignoreLocalIps() {
+    return ($("#ignoreLocal").text() == "true");
+}
+
 
 function checkUrlAjaxy(hostName, hostPort, resultElement) {
     running++;
@@ -29,7 +33,8 @@ function checkUrlAjaxy(hostName, hostPort, resultElement) {
         // The data to send (will be converted to a query string)
         data: {
             host: hostName,
-            port: hostPort
+            port: hostPort,
+            ignoreLocal: ignoreLocalIps()
         },
 
         // Whether this is a POST or GET request
