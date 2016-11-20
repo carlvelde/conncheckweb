@@ -4,6 +4,8 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.input.BOMInputStream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,11 +20,10 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by caabr on 2016-11-12.
- */
 @Controller
 public class StartPage {
+
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     private final DestinationUtils destinationUtils = new DestinationUtils();
 
@@ -38,13 +39,13 @@ public class StartPage {
 
         model.addAttribute("message", "Processing file " + file.getOriginalFilename() + " please wait...");
 
-        ArrayList<ConnectionToCheck> connectionToChecks = new ArrayList<ConnectionToCheck>();
+        ArrayList<ConnectionToCheck> connectionToChecks = new ArrayList<>();
         try {
             final Reader reader = new InputStreamReader(new BOMInputStream(file.getInputStream()), "UTF-8");
             final CSVParser parser = new CSVParser(reader, CSVFormat.newFormat(';').withHeader());
             try {
                 for (final CSVRecord record : parser) {
-                    connectionToChecks.add(parseRecord(connectionToChecks, record));
+                    connectionToChecks.add(parseRecord(record));
                 }
             } finally {
                 parser.close();
@@ -52,24 +53,22 @@ public class StartPage {
             }
         } catch (Exception e) {
             model.addAttribute("message", "Error: " + e.getMessage());
-            e.printStackTrace();
+            log.error("Error while parsing CSV.", e);
         }
         model.addAttribute("connectionToChecks", connectionToChecks);
 
         // Get public IP of this server
-        String publicIP;
         try {
             model.addAttribute(DestinationUtils.getPublicIp(false));
         } catch (IOException e) {
             model.addAttribute("Unable to get public IP of this server.");
-            e.printStackTrace();
+            log.error("Unable to get public IP of this server.", e);
         }
 
         return "docheck2";
     }
 
-    private ConnectionToCheck parseRecord(ArrayList<ConnectionToCheck> connectionToChecks, CSVRecord record) {
-        ConnectionToCheck connectionToCheck;
+    private ConnectionToCheck parseRecord(CSVRecord record) {
 
         HostPort hostPort;
         if (recordHasValue(record, "URI")) {
@@ -94,7 +93,7 @@ public class StartPage {
     }
 
     private List<String> extractInfoFields(CSVRecord record) {
-        ArrayList<String> fields = new ArrayList<String>();
+        ArrayList<String> fields = new ArrayList<>();
 
         addIfFieldNotEmpty(record, "IntegrationObject", fields);
         addIfFieldNotEmpty(record, "External Partner name", fields);
