@@ -12,25 +12,33 @@ public class SimpleSocketTest {
 
     public ConnectionCheckResult hostAvailabilityCheck(String hostname, int tcpPort, boolean ignoreLocal) {
         Socket socket = new Socket();
+        InetAddress inetAddress = null;
 
         try {
-            InetAddress inetAddress = InetAddress.getByName(hostname);
+            inetAddress = InetAddress.getByName(hostname);
             if (ignoreLocal && inetAddress.isSiteLocalAddress())
-                return new ConnectionCheckResult(false, true, hostname + " (" + inetAddress.getHostAddress() + ") is a private network (not reachable over the internet)");
+                return new ConnectionCheckResult(false, false, true, "Ignored. " + hostname + " (" + inetAddress.getHostAddress() + ") is in a private network.");
             socket.connect(new InetSocketAddress(hostname, tcpPort), 4000);
-            return new ConnectionCheckResult(true, false, "");
+            return new ConnectionCheckResult(true, false, false, "");
         } catch (UnknownHostException ex) {
-            return new ConnectionCheckResult(false, true, hostname + " didn't resolve in DNS");
+            return new ConnectionCheckResult(false, true, false, hostname + " didn't resolve in DNS (Check with ICC?)");
         } catch (SocketTimeoutException ex) {
-            return new ConnectionCheckResult(false, false, "Timeout");
+            if (inetAddress != null && inetAddress.isSiteLocalAddress()) {
+                return new ConnectionCheckResult(false, false, false, "Has WL? (Note: Local IP)");
+            } else {
+                return new ConnectionCheckResult(false, false, false, "Has WL?");
+            }
+
+
         } catch (Exception ex) {
             log.error("Unknown error while performing host check", ex);
-            return new ConnectionCheckResult(false, false, ex.getMessage());
+            return new ConnectionCheckResult(false, false, false, ex.getMessage());
         } finally {
             safeCloseSocket(socket);
         }
 
     }
+
 
     private void safeCloseSocket(Socket socket) {
         try {

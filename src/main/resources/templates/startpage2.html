@@ -9,30 +9,14 @@
     <link rel="apple-touch-icon" href="apple-touch-icon.png"/>
 
     <link rel="stylesheet" href="css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="css/bootstrap-theme.min.css"/>
-    <link rel="stylesheet" href="css/main.css"/>
     <style>
         body {
             padding-top: 50px;
             padding-bottom: 20px;
         }
-
-        table {
-            border-collapse: collapse;
-        }
-
-        td, th {
-            border: 1px solid #dddddd;
-            text-align: left;
-            padding: 8px;
-
-        }
-
-        tr:nth-child(even) {
-            background-color: #dddddd;
-        }
     </style>
-
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" href="css/main.css"/>
 
     <script src="js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
 </head>
@@ -80,27 +64,24 @@
 <div class="container">
     <!-- Example row of columns -->
     <div class="row">
-        <p>Local IP of this server is <span th:text="${localIp}"></span></p>
-        <p>Ignore local IPs: <span id="ignoreLocal" th:text="${ignoreLocal}"/></p>
-        <p th:text="${message}"/>
-
-    </div>
-    <div class="row">
-
-        <table>
-            <tr class="hostToCheck" th:each="conn : ${connectionToChecks}">
-                <td th:text="${conn.rowNum}"></td>
-                <td style="word-wrap: break-word; word-break: break-all; white-space: normal;"
-                    th:each="description : ${conn.descriptions}">
-                    <span th:text="${description}"/>
-                </td>
-                <td th:if="${conn.valid}"><span class="hostName" th:text="${conn.hostPort.host}"></span>:<span
-                        class="hostPort" th:text="${conn.hostPort.port}"></span></td>
-                <td th:if="${!conn.valid}"><span class="hostName">N/A</span></td>
-                <td class="urlCheckResult" th:text="${conn.message}"></td>
-
-            </tr>
-        </table>
+        <div class="col-md-4">
+            <h2>Steg 1</h2>
+            <p>Du behöver en Excel fil som innehåller namn på servrar och portar eller URI:er. Första raden måste vara
+                namn på kolumner enligt 1) "Host" och "Port" eller 2) "URI" eller 3) "Destination (External partner)
+                address" och "Port". Ordning och övriga kolumner spelar ingen roll.</p>
+            <p><a class="btn btn-default" href="hosts.csv" target="_blank" role="button">Exempelfil &raquo;</a></p>
+        </div>
+        <div class="col-md-4">
+            <h2>Steg 2</h2>
+            <p>Ladda upp filen här och börja testa</p>
+            <form method="POST" enctype="multipart/form-data" action="/docheck">
+                <p><input name="ignoreLocal" type="checkbox" value="ignoreLocal"/>&nbsp;Ignore hosts with private IPs
+                </p>
+                <p><input type="file" name="file" class="btn btn-default"/></p>
+                <p><input type="submit" value="Upload >>" class="btn btn-default"/></p>
+            </form>
+            <p th:text="${message}"/>
+        </div>
     </div>
 
     <hr/>
@@ -115,22 +96,6 @@
 <script src="js/vendor/bootstrap.min.js"></script>
 
 <script src="js/main.js"></script>
-<script src="js/checkConnection.js"></script>
-
-<script type="text/javascript">
-    $(document).ready(function () {
-
-        $("tr.hostToCheck").each(function (index, element) {
-
-            var hostName = $(element).find("span.hostName").first().text();
-            if (hostName != "N/A") {
-                var hostPort = $(element).find("span.hostPort").first().text();
-                var resultElement = $(element).find("td.urlCheckResult").first();
-                queueRequest(hostName, hostPort, resultElement);
-            }
-        });
-    });
-</script>
 
 
 </body>

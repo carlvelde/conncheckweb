@@ -7,11 +7,13 @@ public class ConnectionCheckResult {
 
     private final boolean success;
     private final boolean warning;
+    private final boolean ignored;
     private final String message;
 
-    public ConnectionCheckResult(boolean success, boolean warning, String message) {
+    public ConnectionCheckResult(boolean success, boolean warning, boolean ignored, String message) {
         this.success = success;
         this.warning = warning;
+        this.ignored = ignored;
         this.message = message;
     }
 
@@ -21,6 +23,10 @@ public class ConnectionCheckResult {
 
     public boolean isWarning() {
         return warning;
+    }
+
+    public boolean isIgnored() {
+        return ignored;
     }
 
     public String getMessage() {

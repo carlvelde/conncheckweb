@@ -51,6 +51,8 @@ function checkUrlAjaxy(hostName, hostPort, resultElement) {
                 resultElement.html('<span style="color: green">OK!</span>');
             } else if (json.warning) {
                 resultElement.html('<span style="color: yellow">WARN! ' + json.message + '</span>');
+            } else if (json.ignored) {
+                resultElement.html('<span>' + json.message + '</span>');
             } else {
                 resultElement.html('<span style="color: red">ERROR! ' + json.message + '</span>');
             }
