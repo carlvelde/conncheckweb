@@ -65,7 +65,7 @@
     <!-- Example row of columns -->
     <div class="row">
         <div class="col-md-4">
-            <h2>Steg 1</h2>
+            <h2>Step 1</h2>
             <p>Du behöver en Excel fil som innehåller namn på servrar och portar eller URI:er. Första raden måste vara
                 namn på kolumner enligt 1) "Host" och "Port" eller 2) "URI" eller 3) "Destination (External partner)
                 address" och "Port". Ordning och övriga kolumner spelar ingen roll.</p>
@@ -75,7 +75,8 @@
             <h2>Steg 2</h2>
             <p>Ladda upp filen här och börja testa</p>
             <form method="POST" enctype="multipart/form-data" action="/docheck">
-                <p><input name="ignoreLocal" type="checkbox" value="ignoreLocal"/>&nbsp;Ignore hosts with private IPs
+                <p><input name="ignoreLocal" type="checkbox" value="ignoreLocal" checked="checked"/>&nbsp;Ignore hosts
+                    with private IPs
                 </p>
                 <p><input type="file" name="file" class="btn btn-default"/></p>
                 <p><input type="submit" value="Upload >>" class="btn btn-default"/></p>

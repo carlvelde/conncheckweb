@@ -21,7 +21,7 @@ public class StartPage {
     @GetMapping("/")
     public String listUploadedFiles(Model model) throws IOException {
 
-        return "startpage";
+        return "startpage2";
     }
 
     @PostMapping("/docheck")

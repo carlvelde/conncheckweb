@@ -77,7 +77,7 @@ public class ExcelParser implements FileParser {
                 try {
                     hostPort = destinationUtils.extractHostPortFromUri(getRecordValue(row, "URI"));
                 } catch (MalformedURLException e) {
-                    return new ConnectionToCheck(row.getRowNum(), extractInfoFields(row), "Row has no valid URI (Check with ICC?)");
+                    return new ConnectionToCheck(row.getRowNum(), extractInfoFields(row), "Row has no valid URI");
                 }
             } else if (recordHasValue(row, "Host") && recordHasValue(row, "Port")) {
                 hostPort = new HostPort(getRecordValue(row, "Host"), Integer.parseInt(getRecordValue(row, "Port")));
@@ -98,6 +98,8 @@ public class ExcelParser implements FileParser {
         if (!isMapped(row, columnName))
             throw new RuntimeException("Row " + row.getRowNum() + " doesn't contain the column " + columnName);
         Cell cell = row.getCell(colunNames.indexOf(columnName));
+        if (cell == null)
+            return "";
         if (columnName.equals("Port")) // Hack!
             return Integer.toString(((int) cell.getNumericCellValue()));
         else
@@ -114,11 +116,13 @@ public class ExcelParser implements FileParser {
 
     private List<String> extractInfoFields(Row row) {
         ArrayList<String> fields = new ArrayList<>();
+        addIfFieldNotEmpty(row, "Name", fields);
         addIfFieldNotEmpty(row, "IntegrationObject", fields);
         addIfFieldNotEmpty(row, "External Partner name", fields);
         addIfFieldNotEmpty(row, "Application", fields);
         addIfFieldNotEmpty(row, "Send Port Name", fields);
         addIfFieldNotEmpty(row, "URI", fields);
+        addIfFieldNotEmpty(row, "Host", fields);
 
         return fields;
     }
